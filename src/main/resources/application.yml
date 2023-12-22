@@ -23,5 +23,5 @@ spring:
 
 custom:
   jwt:
-    expiration-period: 3600
+    expiration-period: 3600000
     secret-key: dasf54we6+5f7414ae9wf87ergh9874h9rt7544y6fg4h6erh453418543412456dfsdfgw43t9072ysda
