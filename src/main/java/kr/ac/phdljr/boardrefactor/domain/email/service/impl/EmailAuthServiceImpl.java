@@ -17,6 +17,7 @@ import kr.ac.phdljr.boardrefactor.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class EmailAuthServiceImpl implements EmailAuthService {
     private String email;
 
     @Override
+    @Async("mailExecutor")
     public void createEmailAuth(final EmailAuthRequestDto emailAuthRequestDto)
         throws MessagingException {
         Optional<EmailAuth> emailAuth = emailAuthRedisRepository.findByEmail(
