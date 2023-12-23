@@ -1,12 +1,17 @@
 package kr.ac.phdljr.boardrefactor.domain.board.controller;
 
 import jakarta.validation.Valid;
-import kr.ac.phdljr.boardrefactor.domain.board.dto.request.BoardUpdateRequestDto;
-import kr.ac.phdljr.boardrefactor.domain.board.dto.response.BoardResponseDto;
+import java.util.List;
 import kr.ac.phdljr.boardrefactor.domain.board.dto.request.BoardCreateRequestDto;
+import kr.ac.phdljr.boardrefactor.domain.board.dto.request.BoardUpdateRequestDto;
+import kr.ac.phdljr.boardrefactor.domain.board.dto.response.BoardAllGetResponseDto;
+import kr.ac.phdljr.boardrefactor.domain.board.dto.response.BoardGetResponseDto;
 import kr.ac.phdljr.boardrefactor.domain.board.service.BoardService;
 import kr.ac.phdljr.boardrefactor.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,15 +34,22 @@ public class BoardController {
     @PostMapping("/boards")
     public ResponseEntity<Void> createBoard(
         @Valid @RequestBody BoardCreateRequestDto boardCreateRequestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         boardService.createBoard(boardCreateRequestDto, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/boards/{boardId}")
-    public ResponseEntity<BoardResponseDto> getBoard(
-        @PathVariable Long boardId){
-        BoardResponseDto responseDto = boardService.getBoard(boardId);
+    public ResponseEntity<BoardGetResponseDto> getBoard(
+        @PathVariable Long boardId) {
+        BoardGetResponseDto responseDto = boardService.getBoard(boardId);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/boards")
+    public ResponseEntity<List<BoardAllGetResponseDto>> getBoardAll(
+        @PageableDefault(size = 20, page = 0) Pageable pageable) {
+        List<BoardAllGetResponseDto> responseDto = boardService.getBoardAll(pageable);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -45,7 +57,7 @@ public class BoardController {
     public ResponseEntity<Void> updateBoard(
         @PathVariable Long boardId,
         @Valid @RequestBody BoardUpdateRequestDto boardUpdateRequestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         boardService.updateBoard(boardId, boardUpdateRequestDto, userDetails.getUser());
         return ResponseEntity.ok().build();
     }
@@ -53,7 +65,7 @@ public class BoardController {
     @DeleteMapping("/boards/{boardId}")
     public ResponseEntity<Void> deleteBoard(
         @PathVariable Long boardId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         boardService.deleteBoard(boardId, userDetails.getUser());
         return ResponseEntity.ok().build();
     }

@@ -1,5 +1,6 @@
 package kr.ac.phdljr.boardrefactor.domain.board.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,6 +9,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import kr.ac.phdljr.boardrefactor.domain.boardlike.entity.BoardLike;
+import kr.ac.phdljr.boardrefactor.domain.comment.entity.Comment;
 import kr.ac.phdljr.boardrefactor.domain.user.entity.User;
 import kr.ac.phdljr.boardrefactor.global.entity.BaseEntity;
 import lombok.AccessLevel;
@@ -34,6 +40,9 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "board")
+    public Set<BoardLike> likes = new LinkedHashSet<>();
+
     @Builder
     public Board(final String title, final String content, final User user) {
         this.title = title;
@@ -41,9 +50,8 @@ public class Board extends BaseEntity {
         this.user = user;
     }
 
-    public Board update(String title, String content){
+    public void update(String title, String content){
         this.title = title;
         this.content = content;
-        return this;
     }
 }

@@ -1,4 +1,4 @@
-package kr.ac.phdljr.boardrefactor.domain.boardlike;
+package kr.ac.phdljr.boardrefactor.domain.boardlike.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserBoardId implements Serializable {
+public class BoardLikeId implements Serializable {
 
     private Long user;
     private Long board;
@@ -21,7 +21,7 @@ public class UserBoardId implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        UserBoardId that = (UserBoardId) o;
+        BoardLikeId that = (BoardLikeId) o;
         return Objects.equals(user, that.user) && Objects.equals(board, that.board);
     }
 

@@ -1,8 +1,12 @@
 package kr.ac.phdljr.boardrefactor.domain.board.mapper;
 
-import kr.ac.phdljr.boardrefactor.domain.board.dto.response.BoardResponseDto;
+import java.util.List;
+import kr.ac.phdljr.boardrefactor.domain.board.dto.response.BoardAllGetResponseDto;
+import kr.ac.phdljr.boardrefactor.domain.board.dto.response.BoardGetResponseDto;
 import kr.ac.phdljr.boardrefactor.domain.board.entity.Board;
 import kr.ac.phdljr.boardrefactor.domain.board.dto.request.BoardCreateRequestDto;
+import kr.ac.phdljr.boardrefactor.domain.comment.dto.response.CommentResponseDto;
+import kr.ac.phdljr.boardrefactor.domain.comment.entity.Comment;
 import kr.ac.phdljr.boardrefactor.domain.user.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,5 +20,13 @@ public interface BoardMapper {
     Board toBoard(BoardCreateRequestDto boardCreateRequestDto, User user);
 
     @Mapping(source = "user.nickname", target = "nickname")
-    BoardResponseDto toBoardResponseDto(Board board);
+    CommentResponseDto toCommentResponseDto(Comment comment);
+
+    @Mapping(source = "board.user.nickname", target = "nickname")
+    BoardGetResponseDto toBoardResponseDto(Board board, List<Comment> comments);
+
+    @Mapping(source = "user.nickname", target = "nickname")
+    BoardAllGetResponseDto toBoardAllGetResponseDto(Board board);
+
+    List<BoardAllGetResponseDto> toBoardAllGetResponseDtoList(List<Board> boards);
 }
