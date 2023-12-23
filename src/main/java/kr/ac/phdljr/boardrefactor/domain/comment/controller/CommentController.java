@@ -33,7 +33,7 @@ public class CommentController {
     public ResponseEntity<List<CommentResponseDto>> getCommentAll(
         @PageableDefault(size = 20, page = 0) Pageable pageable,
         @PathVariable Long boardId){
-        List<CommentResponseDto> responseDto = commentService.findByBoard(boardId, pageable);
+        List<CommentResponseDto> responseDto = commentService.getComments(boardId, pageable);
         return ResponseEntity.ok(responseDto);
     }
 

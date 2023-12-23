@@ -69,11 +69,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponseDto> findByBoard(final Long boardId, final Pageable pageable) {
+    public List<CommentResponseDto> getComments(final Long boardId, final Pageable pageable) {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new NotFoundBoardException(ErrorCode.NOT_FOUND_BOARD));
 
-        commentRepository.findAllByBoardId(boardId, pageable);
-        return null;
+        List<Comment> comments = commentRepository.findAllByBoard(board, pageable);
+
+        return CommentMapper.INSTANCE.toCommentResponseDtoList(comments);
     }
 }

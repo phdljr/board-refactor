@@ -20,5 +20,7 @@ public interface CommentMapper {
     Comment toComment(CommentCreateRequestDto commentCreateRequestDto, User user, Board board);
 
     @Mapping(source = "user.nickname", target = "nickname")
+    CommentResponseDto toCommentResponseDto(Comment comment);
+
     List<CommentResponseDto> toCommentResponseDtoList(List<Comment> comments);
 }

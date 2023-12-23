@@ -49,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new NotFoundBoardException(ErrorCode.NOT_FOUND_BOARD));
 
-        List<Comment> comments = commentRepository.findAllByBoardId(boardId,
+        List<Comment> comments = commentRepository.findAllByBoard(board,
             PageRequest.of(0, 20));
 
         return BoardMapper.INSTANCE.toBoardResponseDto(board, comments);

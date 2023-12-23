@@ -15,5 +15,5 @@ public interface CommentService {
 
     void deleteComment(Long commentId, User user);
 
-    List<CommentResponseDto> findByBoard(Long boardId, Pageable pageable);
+    List<CommentResponseDto> getComments(Long boardId, Pageable pageable);
 }
