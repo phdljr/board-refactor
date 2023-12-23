@@ -14,9 +14,11 @@ public class BoardScheduler {
 
     private final BoardRepository boardRepository;
 
-    @Scheduled(cron = "0 0 0 * * *")
+    // 매일 새벽 6시마다 작업 실행
+    // 사용률이 적은 시간대라고 예상
+    @Scheduled(cron = "0 0 6 * * *")
     public void deleteBoardAfter90Days() {
-        List<Board> boards = boardRepository.findByModifiedAtAfter(
+        List<Board> boards = boardRepository.findByModifiedAtBefore(
             LocalDateTime.now().minusDays(90));
 
         boardRepository.deleteAllInBatch(boards);

@@ -1,6 +1,11 @@
 package kr.ac.phdljr.boardrefactor.domain.user.service.impl;
 
 import java.util.Objects;
+import kr.ac.phdljr.boardrefactor.domain.email.entity.EmailAuth;
+import kr.ac.phdljr.boardrefactor.domain.email.exception.NotConfirmEmailAuthException;
+import kr.ac.phdljr.boardrefactor.domain.email.exception.NotFoundEmailException;
+import kr.ac.phdljr.boardrefactor.domain.email.repository.EmailAuthRedisRepository;
+import kr.ac.phdljr.boardrefactor.domain.email.service.EmailAuthService;
 import kr.ac.phdljr.boardrefactor.domain.user.dto.request.SignUpRequestDto;
 import kr.ac.phdljr.boardrefactor.domain.user.entity.User;
 import kr.ac.phdljr.boardrefactor.domain.user.entity.UserRole;
@@ -21,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailAuthRedisRepository emailAuthRedisRepository;
 
     @Override
     public void signUp(final SignUpRequestDto signUpRequestDto) {
@@ -42,9 +48,12 @@ public class UserServiceImpl implements UserService {
             throw new NotMatchPasswordException(ErrorCode.NOT_MATCH_PASSWORD);
         }
 
-
         // 이메일이 인증됐는지 확인
-        // TODO
+        EmailAuth emailAuth = emailAuthRedisRepository.findByEmail(signUpRequestDto.email())
+            .orElseThrow(() -> new NotFoundEmailException(ErrorCode.NOT_FOUND_EMAIL));
+        if(!emailAuth.isCheck()){
+            throw new NotConfirmEmailAuthException(ErrorCode.NOT_CONFIRM_EMAIL);
+        }
 
         // 저장
         User user = User.builder()
@@ -53,7 +62,9 @@ public class UserServiceImpl implements UserService {
             .password(passwordEncoder.encode(signUpRequestDto.password()))
             .role(UserRole.USER)
             .build();
+
         userRepository.save(user);
+        emailAuthRedisRepository.delete(emailAuth);
     }
 
     @Override

@@ -10,5 +10,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findByOrderByCreatedAtDesc(Pageable pageable);
 
-    List<Board> findByModifiedAtAfter(LocalDateTime localDateTime);
+    List<Board> findByModifiedAtBefore(LocalDateTime localDateTime);
 }

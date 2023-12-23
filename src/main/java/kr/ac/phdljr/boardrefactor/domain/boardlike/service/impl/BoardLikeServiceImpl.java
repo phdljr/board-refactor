@@ -33,7 +33,7 @@ public class BoardLikeServiceImpl implements BoardLikeService {
             .orElseThrow(() -> new NotFoundUserException(ErrorCode.NOT_FOUND_USER));
 
         if (boardLikeRepository.existsByUserAndBoard(findUser, board)) {
-            throw new AlreadyExistsBoardLikeException(ErrorCode.ALREADY_EXIST_BOARDLIKE);
+            throw new AlreadyExistsBoardLikeException(ErrorCode.ALREADY_EXIST_BOARD_LIKE);
         }
 
         BoardLike boardLike = BoardLike.builder()
